@@ -52,6 +52,11 @@ RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
 RUN /opt/bitnami/scripts/locales/generate-locales.sh
 RUN uninstall_packages curl
 
+RUN apt-get update && apt install -y postgresql-common ca-certificates \
+  && YES="yes" /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh \
+  && apt install -y postgresql-18-pgvector postgresql-18-timescaledb \
+  && apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
 COPY rootfs /
 RUN /opt/bitnami/scripts/postgresql/postunpack.sh
 ENV APP_VERSION="18.1.0" \
